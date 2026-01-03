@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boda Eduar & Dayana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary:#b89b5e;
+      --dark:#2b2b2b;
+      --light:#faf9f7;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Montserrat,sans-serif;background:var(--light);color:var(--dark)}
+    header{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1200') center/cover no-repeat;color:#fff;padding:24px}
+    h1{font-family:'Playfair Display',serif;font-size:3rem;margin:.2em 0}
+    h2{font-family:'Playfair Display',serif;font-weight:400}
+    section{padding:56px 20px;max-width:1000px;margin:auto}
+    .card{background:#fff;border-radius:18px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+    .grid{display:grid;gap:24px}
+    @media(min-width:768px){.grid{grid-template-columns:1fr 1fr}}
+    .btn{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--primary);color:#fff;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+    .muted{opacity:.8}
+    footer{padding:32px;text-align:center;opacity:.85}
+    label{display:block;margin-top:12px}
+    input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #ddd}
+    .qr{max-width:160px;margin-top:12px}
+    .countdown{font-size:1.2rem;font-weight:600;letter-spacing:1px}
+    audio{width:100%;margin-top:12px}
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h2>Con la bendición de Dios</h2>
+    <h1>Eduar & Dayana</h1>
+    <p>20 de diciembre de 2026 · Chalchuapa</p>
+    <p>“Todo lo puedo en Cristo que me fortalece” — Filipenses 4:13</p>
+    <div class="countdown" id="countdown"></div>
+  </div>
+</header>
+
+<section>
+  <div class="grid">
+    <div class="card">
+      <h2>📍 Lugar</h2>
+      <p>Chalchuapa, El Salvador</p>
+      <p>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Chalchuapa" target="_blank">Google Maps</a>
+        <a class="btn" href="https://waze.com/ul?q=Chalchuapa" target="_blank">Waze</a>
+      </p>
+    </div>
+    <div class="card">
+      <h2>👗 Código de vestimenta</h2>
+      <p><strong>Elegante / Formal</strong></p>
+      <p>Colores sugeridos: beige, dorado, neutros y tonos pastel.</p>
+      <p class="muted">Agradecemos evitar el color blanco.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="grid">
+    <div class="card">
+      <h2>🎶 Música</h2>
+      <p class="muted">Alabanza instrumental de fondo</p>
+      <audio controls autoplay loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1b0e37b6c3.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <div class="card">
+      <h2>📸 Álbum colaborativo</h2>
+      <p>Sube y comparte las fotos de este día tan especial.</p>
+      <a class="btn" href="https://photos.app.goo.gl/" target="_blank">Abrir álbum</a>
+      <p class="muted">Reemplaza el link por tu álbum real</p>
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://photos.app.goo.gl/" alt="QR Álbum">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>✅ Confirmar asistencia</h2>
+    <p class="muted">Por favor confirma tu asistencia</p>
+    <form onsubmit="return submitRSVP()">
+      <label>Nombre del invitado
+        <input id="guest" required>
+      </label>
+      <label>Cantidad de personas
+        <select id="qty"></select>
+      </label>
+      <button class="btn" type="submit">Confirmar asistencia</button>
+    </form>
+    <p class="muted">Invitación personalizada por link: <code>?max=2</code>, <code>?max=5</code></p>
+  </div>
+</section>
+
+<footer>
+  <p>Con amor, Eduar & Dayana 💍</p>
+</footer>
+
+<script>
+  // Countdown
+  const eventDate = new Date('2026-12-20T15:00:00');
+  const cd = document.getElementById('countdown');
+  setInterval(()=>{
+    const now = new Date();
+    const diff = eventDate - now;
+    if(diff <= 0){ cd.textContent = '¡Hoy es el gran día!'; return; }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff%86400000/3600000);
+    const m = Math.floor(diff%3600000/60000);
+    cd.textContent = `Faltan ${d} días ${h} horas ${m} minutos`;
+  },1000);
+
+  // RSVP max por invitación
+  const params = new URLSearchParams(window.location.search);
+  const max = parseInt(params.get('max') || '2',10);
+  const qty = document.getElementById('qty');
+  for(let i=1;i<=max;i++){const o=document.createElement('option');o.value=i;o.textContent=i;qty.appendChild(o);}
+
+  function submitRSVP(){
+    alert('¡Gracias por confirmar tu asistencia!');
+    return false; // Aquí se puede integrar Google Forms / Sheets
+  }
+</script>
+
+</body>
+</html>
